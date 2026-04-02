@@ -17,7 +17,7 @@ data/stanford_cars/
 *.jpg
 *.jpeg
 *.png
-!docs/
+!docs/*.png
 
 # =========================
 # Model Weights & Checkpoints
