@@ -1,0 +1,48 @@
+# =========================
+# Python & Environments
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.venv/
+.env
+
+# =========================
+# Datasets & Annotations
+# =========================
+data/stanford_cars/
+*.mat
+*.jpg
+*.jpeg
+*.png
+
+# =========================
+# Model Weights & Checkpoints
+# =========================
+siglip_lora_model/
+*.pt
+*.pth
+*.bin
+*.safetensors
+
+# =========================
+# Vector Databases (FAISS)
+# =========================
+*.index
+
+# =========================
+# Logs & Evaluation Metrics
+# =========================
+runs/
+tensorboard_logs/
+evaluation_results.json
+
+# =========================
+# OS & IDE Configurations
+# =========================
+.DS_Store
+.vscode/
+.idea/
+*.swp

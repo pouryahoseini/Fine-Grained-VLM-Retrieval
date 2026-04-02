@@ -1,0 +1,20 @@
+# Core Machine Learning & Vision
+torch>=2.8.0
+torchvision>=0.23.0
+transformers>=5.4.0
+peft>=0.18.1
+tensorboard>=2.20.0
+
+# Vector Database
+faiss-cpu>=1.12.0  # Change to faiss-gpu if you want GPU-accelerated indexing
+
+# Image Processing & Utilities
+opencv-python>=4.12.0
+pillow>=11.3.0
+matplotlib>=3.10.7
+scipy>=1.16.2
+tqdm>=4.67.1
+
+# Synthetic Data Generation
+ollama>=0.6.0
+pydantic>=2.12.0
