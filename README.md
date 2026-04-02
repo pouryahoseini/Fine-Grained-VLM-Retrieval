@@ -1,4 +1,4 @@
-# 🚓 Fine-Tuned Multimodal Vehicle Retrieval (SigLIP + FAISS)
+# 🚓 Fine-Grained Multimodal Vehicle Retrieval (SigLIP + FAISS)
 
 An end-to-end, production-ready Vision-Language Model (VLM) pipeline designed for high-precision, cross-modal vehicle retrieval. This system allows a user to type organic, natural-language search queries (e.g., *"red 2012 chevy pickup"* or *"older model mercedes coupe"*) and retrieve specific vehicle instances from a visual database in milliseconds.
 
