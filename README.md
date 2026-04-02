@@ -89,17 +89,17 @@ Launch the interactive terminal to query the database in real-time. The script d
 Here are a few examples of the model successfully retrieving specific vehicle instances from the database using natural-language queries. Notice how the model correctly ignores syntactic noise and hones in on the specific make, model, and trim.
 
 <p align="center">
-  <img src="./docs/example_1.png" width="32%" alt="Successful Query 1">
-  <img src="./docs/example_2.png" width="32%" alt="Successful Query 2">
-  <img src="./docs/example_3.png" width="32%" alt="Successful Query 3">
-  <img src="./docs/example_4.png" width="32%" alt="Successful Query 4">
-  <img src="./docs/example_5.png" width="32%" alt="Successful Query .png" width="32%" alt="Successful Query 5">
+  <img src="./docs/example_1.png" width="49%" alt="Successful Query 1">
+  <img src="./docs/example_2.png" width="49%" alt="Successful Query 2">
+  <img src="./docs/example_3.png" width="49%" alt="Successful Query 3">
+  <img src="./docs/example_4.png" width="49%" alt="Successful Query 4">
+  <img src="./docs/example_5.png" width="49%" alt="Successful Query .png" width="32%" alt="Successful Query 5">
 </p>
 
 The following exmaple also shows a query with the third results being incorrect. The mistaken car is visually very similar to the queried car.
 
 <p align="center">
-  <img src="./docs/mistake_example.png" width="32%" alt="Query 6 with one mistake. The mistaken car is visually very similar to the quried car.">
+  <img src="./docs/mistake_example.png" width="49%" alt="Query 6 with one mistake. The mistaken car is visually very similar to the quried car.">
 </p>
 
 *Note: The confidence scores displayed above are raw FAISS cosine similarities.*
