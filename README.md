@@ -96,7 +96,7 @@ Here are a few examples of the model successfully retrieving specific vehicle in
   <img src="./docs/example_5.png" width="49%" alt="Successful Query .png" width="32%" alt="Successful Query 5">
 </p>
 
-The following exmaple also shows a query with the third results being incorrect. The mistaken car is visually very similar to the queried car.
+The following example also shows a query with the third results being incorrect. The mistaken car is visually very similar to the queried car.
 
 <p align="center">
   <img src="./docs/mistake_example.png" width="49%" alt="Query 6 with one mistake. The mistaken car is visually very similar to the quried car.">

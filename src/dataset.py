@@ -58,7 +58,7 @@ class StanfordCarsDataset(Dataset):
         except Exception as e:
             print(f"Data Warning: {e}. Sampling fallback image.")
 
-            # Returning a blak image is not a good idea.
+            # Returning a blank image is not a good idea.
             # Instead, recursively sample another random valid image from the dataset.
             fallback_idx = random.randint(0, len(self.data_records) - 1)
             return self.__getitem__(fallback_idx)
