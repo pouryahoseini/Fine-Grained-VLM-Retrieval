@@ -13,13 +13,15 @@ from torch.optim import AdamW
 from evaluate import RetrievalEvaluator
 from dataloader import create_dataloaders
 
-# --- The Upgraded Training Loop ---
+# --- Training Loop ---
 def train_model(train_dataset: torch.utils.data.Dataset, val_dataloader: torch.utils.data.DataLoader, 
                 model_id: str = "google/siglip-base-patch16-224", batch_size: int = 16,
                 num_workers: int = 8, epochs: int = 10, accum_steps: int = 4, patience: int = 3, 
                 warmup_ratio: float = 0.1, lr: float = 5e-5, weight_decay: float = 0.01, 
                 autocast_dtype: torch.dtype = torch.bfloat16,
-                save_dir: str = "./siglip_lora_model", log_dir: str = "./siglip_lora_model/tensorboard_logs") -> torch.nn.Module:
+                save_dir: str = "./siglip_lora_model", log_dir: str = "./siglip_lora_model/tensorboard_logs",
+                lora_r: int = 16, lora_alpha: int = 32, lora_dropout: float = 0.05, 
+                lora_target_modules: list = ["q_proj", "v_proj"]) -> torch.nn.Module:
     """Trains a LoRA adapter on top of a pre-trained model using Distributed Data Parallel (DDP) for multi-GPU training, 
     with support for mixed precision and gradient accumulation.
     Args:
@@ -37,6 +39,10 @@ def train_model(train_dataset: torch.utils.data.Dataset, val_dataloader: torch.u
         autocast_dtype: The data type to use for automatic mixed precision (e.g., torch.float16 or torch.bfloat16).
         save_dir: The directory where the best model will be saved.
         log_dir: The directory where TensorBoard logs will be saved.
+        lora_r: The rank of the LoRA adapter.
+        lora_alpha: The scaling factor for the LoRA adapter.
+        lora_dropout: The dropout probability for the LoRA adapter.
+        lora_target_modules: A list of module names to apply LoRA to (e.g., ["q_proj", "v_proj"]).
     Returns:
         The best model after training, loaded into memory.
     """
@@ -64,7 +70,7 @@ def train_model(train_dataset: torch.utils.data.Dataset, val_dataloader: torch.u
     )
 
     # Model & LoRA Setup
-    model = setup_peft_model(model_id).to(device)
+    model = setup_peft_model(model_id, lora_r, lora_alpha, lora_dropout, lora_target_modules).to(device)
     
     # Wrap model in DDP if running distributed
     if world_size > 1:
@@ -234,10 +240,15 @@ def setup_ddp() -> Tuple[int, int, int]:
         
     return local_rank, global_rank, world_size
 
-def setup_peft_model(model_id: str = "google/siglip-base-patch16-224") -> torch.nn.Module:
+def setup_peft_model(model_id: str = "google/siglip-base-patch16-224", r: int = 16, lora_alpha: int = 32, 
+                     lora_dropout: float = 0.05, target_modules: list = ["q_proj", "v_proj"]) -> torch.nn.Module:
     """Loads the base model and sets up the LoRA configuration for fine-tuning.
     Args:
         model_id: The identifier of the pre-trained model to load.
+        r: The rank of the LoRA adapter.
+        lora_alpha: The scaling factor for the LoRA adapter.
+        lora_dropout: The dropout probability for the LoRA adapter.
+        target_modules: A list of module names to apply LoRA to (e.g., ["q_proj", "v_proj"]).
     Returns:
         The PEFT-wrapped model ready for training.
     """
@@ -246,10 +257,10 @@ def setup_peft_model(model_id: str = "google/siglip-base-patch16-224") -> torch.
     model = AutoModel.from_pretrained(model_id)
 
     config = LoraConfig(
-        r=16,
-        lora_alpha=32,
-        target_modules=["q_proj", "v_proj"],
-        lora_dropout=0.05,
+        r=r,
+        lora_alpha=lora_alpha,
+        target_modules=target_modules,
+        lora_dropout=lora_dropout,
         bias="none",
         # modules_to_save=["logit_scale", "logit_bias"] 
     )
@@ -310,6 +321,10 @@ if __name__ == "__main__":
     autocast_dtype = torch.bfloat16
     save_dir = "./siglip_lora_model"
     log_dir = "./siglip_lora_model/tensorboard_logs"
+    lora_r = 16
+    lora_alpha = 32
+    lora_dropout = 0.05
+    lora_target_modules = ["q_proj", "v_proj"]
 
     # Setup hardware device
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -329,7 +344,9 @@ if __name__ == "__main__":
     trained_model = train_model(train_loader.dataset, val_loader, model_id=model_id, batch_size=batch_size,
                                 num_workers=num_workers, epochs=epochs, accum_steps=accum_steps, 
                                 patience=patience, warmup_ratio=warmup_ratio, lr=lr, weight_decay=weight_decay, 
-                                autocast_dtype=autocast_dtype, save_dir=save_dir, log_dir=log_dir)
+                                autocast_dtype=autocast_dtype, save_dir=save_dir, log_dir=log_dir,
+                                lora_r=lora_r, lora_alpha=lora_alpha, lora_dropout=lora_dropout, 
+                                lora_target_modules=lora_target_modules)
     trained_model.eval()
     
     # Load the original pre-trained model (before fine-tuning) to establish the zero-shot baseline
