@@ -36,6 +36,9 @@ class StanfordCarsDataset(Dataset):
                 - "input_ids": The tokenized caption tensor ready for model input. Shape: (max_length,)
                 - "attention_mask": The attention mask tensor for the caption. Shape: (max_length,). 
                     Optional, only if the processor returns it.
+                - "class_id": The class ID of the image.
+                - "image_path": The path to the image.
+                - "label_name": The label name of the image.
                 - "raw_text": The original caption string (useful for debugging or analysis)
         """
 
